@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}{{ user.full_name }} · {{ site_name }}{% endblock %}
+{% block content %}
+
+<div class="glass-card">
+  <div class="id-header">
+    {% if user.photo_url %}
+      <img class="profile-photo" src="{{ user.photo_url }}" alt="Foto de {{ user.full_name }}">
+    {% else %}
+      <div class="profile-photo-placeholder">{{ user.full_name[0] | upper }}</div>
+    {% endif %}
+    <div class="id-meta">
+      <p class="eyebrow">Ficha de identificación</p>
+      <h1>{{ user.full_name }}</h1>
+      {% if user.document_id %}<p class="muted">Documento: {{ user.document_id }}</p>{% endif %}
+    </div>
+  </div>
+
+  {% if user.address or user.phone %}
+  <div class="glass-section">
+    <h3>Datos de contacto</h3>
+    {% if user.address %}<p style="margin-top:8px;">{{ user.address }}</p>{% endif %}
+    {% if user.phone %}<p class="muted" style="margin-top:4px;">{{ user.phone }}</p>{% endif %}
+  </div>
+  {% endif %}
+
+  {% if contacts %}
+  <a class="btn btn-emergency" style="margin-top:18px;" href="{{ contacts[0].wa_link }}" target="_blank" rel="noopener">
+    Avisar por WhatsApp a {{ contacts[0].name.split(' ')[0] }}
+  </a>
+  <div class="glass-section">
+    <h3>Contactos de emergencia</h3>
+    {% for c in contacts %}
+      <div class="contact-row">
+        <div class="contact-info">
+          <div class="name">{{ c.name }}{% if c.relationship %} <span class="muted">· {{ c.relationship }}</span>{% endif %}</div>
+          {% if c.phone %}<div class="phone">{{ c.phone }}</div>{% endif %}
+        </div>
+        {% if c.wa_link %}
+        <a class="wa-btn" href="{{ c.wa_link }}" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp a {{ c.name }}">
+          <svg viewBox="0 0 32 32" fill="white"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.4.7 4.6 1.9 6.5L4 29l7.7-1.9c1.8 1 3.9 1.5 6.3 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-2 0-3.9-.5-5.6-1.5l-.4-.2-4.6 1.1 1.2-4.5-.3-.4C5.2 17.6 4.6 16.3 4.6 15c0-6.3 5.1-11.4 11.4-11.4S27.4 8.7 27.4 15 22.3 24.8 16 24.8zm6.3-8.5c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2s-.9 1.1-1.1 1.3-.4.3-.7.1c-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.3.5-.5.2-.2.2-.3.3-.5.1-.2.1-.4 0-.6-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.4 3.7 5.9 5.1.8.3 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2-.8 2.3-1.6.3-.8.3-1.4.2-1.6-.1-.1-.3-.2-.6-.4z"/></svg>
+        </a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="glass-section">
+    <h3>Información médica</h3>
+    {% if unlocked %}
+      {% if medical_fields %}
+        {% for label, value in medical_fields %}
+          <div class="medical-row">
+            <span class="label">{{ label }}</span>
+            <span class="value">{{ value }}</span>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="muted" style="margin-top:8px;">No hay información médica registrada.</p>
+      {% endif %}
+      <p class="faint" style="margin-top:10px;">Este resumen es orientativo, no reemplaza una historia clínica.</p>
+    {% else %}
+      <p class="muted" style="margin-top:8px; margin-bottom: 14px;">
+        <span class="lock-icon">🔒</span> Protegida. Ingresa el código de la
+        persona (impreso junto a la tarjeta/manilla) para verla.
+      </p>
+      <form method="POST" action="{{ url_for('public.unlock', slug=user.slug) }}">
+        <input type="password" name="pin" inputmode="numeric" placeholder="Código / PIN" required autocomplete="off">
+        <button class="btn btn-action" style="margin-top:12px;" type="submit">Ver información médica</button>
+      </form>
+    {% endif %}
+  </div>
+
+  <div class="btn-row" style="margin-top:20px;">
+    <a class="btn btn-ghost" href="{{ url_for('public.edit_profile', slug=user.slug) }}">Editar perfil</a>
+  </div>
+</div>
+
+<footer class="page-footer">
+  <span class="faint">{{ site_name }}</span>
+</footer>
+{% endblock %}

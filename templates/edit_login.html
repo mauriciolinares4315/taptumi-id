@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Editar perfil · {{ user.full_name }}{% endblock %}
+{% block content %}
+<div class="glass-card">
+  <p class="eyebrow">Editar perfil</p>
+  <h1>{{ user.full_name }}</h1>
+  <p class="muted" style="margin-top:10px;">
+    Ingresa la contraseña o el PIN de este perfil para poder editarlo.
+  </p>
+  <form method="POST" action="{{ url_for('public.edit_profile', slug=user.slug) }}">
+    <label for="pin">Contraseña / PIN</label>
+    <input id="pin" type="password" name="pin" required autocomplete="off" autofocus>
+    <button class="btn btn-action" type="submit" style="margin-top:18px;">Continuar</button>
+  </form>
+  <div style="margin-top:16px; text-align:center;">
+    <a class="link-plain" href="{{ url_for('public.profile', slug=user.slug) }}">&larr; Volver al perfil</a>
+  </div>
+</div>
+{% endblock %}

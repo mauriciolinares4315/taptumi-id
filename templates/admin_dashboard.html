@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Panel admin · {{ site_name }}{% endblock %}
+{% block page_width %}page-wide{% endblock %}
+{% block content %}
+
+<div class="top-bar">
+  <div class="brand">
+    <div class="nfc-badge" style="width:36px;height:36px;margin:0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.4" stroke-linecap="round" style="width:16px;height:16px;">
+        <path d="M6 8a6 6 0 0 1 12 0"/><path d="M9 11a3 3 0 0 1 6 0"/>
+        <circle cx="12" cy="15" r="1.4" fill="white" stroke="none"/>
+      </svg>
+    </div>
+    {{ site_name }} · Admin
+  </div>
+  <div style="display:flex; gap:10px; align-items:center;">
+    <span class="faint">{{ session.get('admin_username') }}</span>
+    <a class="btn btn-ghost btn-sm" href="{{ url_for('admin.logout') }}">Salir</a>
+  </div>
+</div>
+
+<div class="glass-card">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+    <h1>Usuarios</h1>
+    <a class="btn btn-action btn-sm" href="{{ url_for('admin.create_user') }}">+ Crear usuario</a>
+  </div>
+
+  <form class="search-box" style="margin-top:20px;" method="GET">
+    <input type="hidden" name="estado" value="{{ estado }}">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por nombre, slug o documento...">
+    <button class="btn btn-ghost btn-sm" type="submit">Buscar</button>
+  </form>
+
+  <div class="badge-row" style="margin-bottom:14px;">
+    <a class="badge {% if estado == 'activos' %}active{% endif %}" href="?estado=activos{% if q %}&q={{ q }}{% endif %}">Activos</a>
+    <a class="badge {% if estado == 'inactivos' %}inactive{% endif %}" href="?estado=inactivos{% if q %}&q={{ q }}{% endif %}">Bloqueados</a>
+    <a class="badge" href="?estado=todos{% if q %}&q={{ q }}{% endif %}">Todos</a>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Slug / URL</th>
+          <th>Documento</th>
+          <th>Estado</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u.full_name }}</td>
+          <td><a href="{{ url_for('public.profile', slug=u.slug) }}" target="_blank">/{{ u.slug }}</a></td>
+          <td>{{ u.document_id or '—' }}</td>
+          <td>
+            {% if u.is_active %}<span class="badge active">Activo</span>{% else %}<span class="badge inactive">Bloqueado</span>{% endif %}
+          </td>
+          <td>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <a class="btn btn-ghost btn-sm" href="{{ url_for('admin.edit_user', user_id=u.id) }}">Editar</a>
+              <form method="POST" action="{{ url_for('admin.reset_password', user_id=u.id) }}">
+                <button class="btn btn-ghost btn-sm" type="submit">Reset PIN</button>
+              </form>
+              <form method="POST" action="{{ url_for('admin.toggle_status', user_id=u.id) }}">
+                <button class="btn btn-ghost btn-sm" type="submit">{{ 'Bloquear' if u.is_active else 'Reactivar' }}</button>
+              </form>
+              <form method="POST" action="{{ url_for('admin.delete_user', user_id=u.id) }}"
+                    onsubmit="return confirm('¿Eliminar permanentemente a {{ u.full_name }}? Esta acción no se puede deshacer.');">
+                <button class="btn btn-danger-outline btn-sm" type="submit">Eliminar</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="muted">No hay usuarios que coincidan con la búsqueda.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
