@@ -239,8 +239,7 @@ label {
 }
 label:first-child { margin-top: 0; }
 
-input[type="text"], input[type="tel"], input[type="password"],
-input[type="file"], textarea, select {
+input[type="text"], input[type="tel"], input[type="password"], textarea, select {
   width: 100%;
   padding: 13px 15px;
   border-radius: var(--radius-md);
@@ -256,6 +255,62 @@ input:focus, textarea:focus, select:focus {
   outline: none;
   border-color: var(--accent-action);
   box-shadow: 0 0 0 3px rgba(10,132,255,0.25);
+}
+
+.select-wrap {
+  position: relative;
+}
+.select-wrap select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 40px;
+  cursor: pointer;
+}
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text-secondary);
+  border-bottom: 2px solid var(--text-secondary);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+select option {
+  background: var(--bg-mid);
+  color: var(--text-primary);
+}
+
+.file-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.file-field input[type="file"] {
+  display: none;
+}
+.file-field .file-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--glass-bg-strong);
+  border: 1px solid var(--glass-border);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+.file-field .file-btn:hover { filter: brightness(1.15); }
+.file-field .file-name {
+  font-size: 13px;
+  color: var(--text-faint);
 }
 
 .field-hint { font-size: 12px; color: var(--text-faint); margin-top: 4px; }
@@ -329,3 +384,25 @@ td a { color: var(--accent-action); text-decoration: none; }
 a.link-plain { color: var(--accent-action); text-decoration: none; font-weight: 600; font-size: 14px; }
 
 footer.page-footer { margin-top: 32px; text-align: center; }
+
+/*mostrar/ocultar contraseña */
+.password-wrapper {
+  position: relative;
+}
+.password-wrapper input {
+  padding-right: 46px; 
+}
+.password-toggle {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+}
+.password-toggle:hover { color: var(--text-primary); }

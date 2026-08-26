@@ -66,7 +66,13 @@
         persona (impreso junto a la tarjeta/manilla) para verla.
       </p>
       <form method="POST" action="{{ url_for('public.unlock', slug=user.slug) }}">
-        <input type="password" name="pin" inputmode="numeric" placeholder="Código / PIN" required autocomplete="off">
+        <div class="password-wrapper">
+        <input id="password" type="password" name="password" required>
+        <button type="button" class="password-toggle" aria-label="Mostrar contraseña"
+                onclick="togglePasswordVisibility(this)">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        </div>
         <button class="btn btn-action" style="margin-top:12px;" type="submit">Ver información médica</button>
       </form>
     {% endif %}
