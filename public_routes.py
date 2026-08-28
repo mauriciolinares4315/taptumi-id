@@ -60,8 +60,7 @@ def _unlock(slug):
 def _contact_message(full_name):
     return (
         f"Hola, encontré a {full_name} y tengo su ficha de identificación de "
-        f"emergencia. Vi que soy su contacto de emergencia, ¿me puedes confirmar "
-        f"si está todo bien o cómo puedo ayudar?"
+        f"emergencia. Vi que eres su contacto de emergencia, ¿cómo puedo ayudar?"
     )
 
 
