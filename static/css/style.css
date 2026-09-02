@@ -406,3 +406,49 @@ footer.page-footer { margin-top: 32px; text-align: center; }
   align-items: center;
 }
 .password-toggle:hover { color: var(--text-primary); }
+/* ==========================================================================
+   Admin dashboard responsive — modo tarjeta para pantallas pequeñas
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  .table-wrap { border: none; overflow-x: visible; }
+
+  table, thead, tbody, th, td, tr { display: block; }
+
+  thead { display: none; } 
+
+  tbody tr {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 14px;
+    padding: 6px 14px;
+  }
+
+  tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--glass-border);
+    padding: 10px 0;
+    white-space: normal;
+  }
+  tbody td:last-child { border-bottom: none; }
+
+  tbody td::before {
+    content: attr(data-label);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  tbody td[data-label="Acciones"] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  tbody td[data-label="Acciones"]::before { margin-bottom: 8px; }
+}
