@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ 'PIN restablecido' if reset else 'Perfil creado' }} · Admin{% endblock %}
+{% block content %}
+<div class="glass-card" style="text-align:center;">
+  <p class="eyebrow">
+    {{ 'PIN restablecido' if reset else 'Perfil creado' }} · {{ 'Mascota' if kind == 'mascota' else 'Persona' }}
+  </p>
+  <h1>{{ name }}</h1>
+
+  <div class="credential-box">
+    <p class="faint">URL del perfil (para grabar en la tarjeta/manilla NFC)</p>
+    <p class="slug">{{ request.url_root.rstrip('/') }}/{{ slug }}</p>
+    <p class="faint" style="margin-top:14px;">PIN inicial</p>
+    <p class="password">{{ pin }}</p>
+  </div>
+
+  <p class="muted" style="font-size:14px;">
+    {% if kind == 'mascota' %}
+      Comparte este PIN con el dueño/a para que pueda editar el perfil. La
+      información de la mascota es pública apenas alguien escanea la tarjeta,
+      el PIN solo protege la edición.
+    {% else %}
+      Comparte este PIN de forma segura con la persona (o su acudiente). Al
+      editar el perfil se le pedirá reemplazarlo por una contraseña propia.
+    {% endif %}
+  </p>
+
+  <div class="btn-row" style="margin-top:20px;">
+    <a class="btn btn-ghost" href="{{ url_for('public.profile', slug=slug) }}" target="_blank">Ver perfil</a>
+    <a class="btn btn-action" href="{{ url_for('admin.dashboard') }}">Volver al panel</a>
+  </div>
+</div>
+{% endblock %}

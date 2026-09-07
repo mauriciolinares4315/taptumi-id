@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Editar {{ pet.pet_name }} · Admin{% endblock %}
+{% block content %}
+<div class="glass-card">
+  <p class="eyebrow">Editando mascota (como admin)</p>
+  <h1>{{ pet.pet_name }}</h1>
+  <p class="faint" style="margin-top:6px;">Slug: /{{ pet.slug }}</p>
+
+  <form method="POST" enctype="multipart/form-data" style="margin-top:14px;">
+    <label for="pet_name">Nombre *</label>
+    <input id="pet_name" type="text" name="pet_name" value="{{ pet.pet_name }}" required>
+
+    <div class="form-grid-2">
+      <div>
+        <label for="species">Especie</label>
+        <select id="species" name="species">
+          {% set current = pet.species or '' %}
+          {% for opt in ['', 'Perro', 'Gato', 'Otro'] %}
+            <option value="{{ opt }}" {% if opt == current %}selected{% endif %}>{{ opt if opt else 'Selecciona' }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="breed">Raza</label>
+        <input id="breed" type="text" name="breed" value="{{ pet.breed or '' }}">
+      </div>
+    </div>
+
+    <label for="color_markings">Color / señas particulares</label>
+    <textarea id="color_markings" name="color_markings">{{ pet.color_markings or '' }}</textarea>
+
+    <div class="form-grid-2">
+      <div>
+        <label for="sex">Sexo</label>
+        <select id="sex" name="sex">
+          {% set current = pet.sex or '' %}
+          {% for opt in ['', 'Macho', 'Hembra'] %}
+            <option value="{{ opt }}" {% if opt == current %}selected{% endif %}>{{ opt if opt else 'Selecciona' }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label for="age_approx">Edad aproximada</label>
+        <input id="age_approx" type="text" name="age_approx" value="{{ pet.age_approx or '' }}">
+      </div>
+    </div>
+
+    <label for="sterilized">Esterilizado/a</label>
+    <select id="sterilized" name="sterilized">
+      {% set current = 'si' if pet.sterilized == 1 else ('no' if pet.sterilized == 0 else '') %}
+      <option value="" {% if current == '' %}selected{% endif %}>No sé / no aplica</option>
+      <option value="si" {% if current == 'si' %}selected{% endif %}>Sí</option>
+      <option value="no" {% if current == 'no' %}selected{% endif %}>No</option>
+    </select>
+
+    <label for="microchip">Número de microchip</label>
+    <input id="microchip" type="text" name="microchip" value="{{ pet.microchip or '' }}">
+
+    <h3 style="margin-top:22px;">Foto</h3>
+    {% if pet.photo_url %}
+      <div style="margin-top:10px; display:flex; align-items:center; gap:14px;">
+        <img class="profile-photo" src="{{ pet.photo_url }}" alt="Foto actual">
+        <label style="margin:0; display:flex; align-items:center; gap:6px; font-weight:500;">
+          <input type="checkbox" name="remove_photo" value="1" style="width:auto;"> Quitar foto
+        </label>
+      </div>
+    {% endif %}
+    <input type="file" name="photo" accept="image/*" style="margin-top:10px;">
+
+    <h3 style="margin-top:22px;">Dueño/a</h3>
+    <label for="owner_name">Nombre</label>
+    <input id="owner_name" type="text" name="owner_name" value="{{ pet.owner_name or '' }}">
+    <label for="owner_phone">Teléfono (WhatsApp)</label>
+    <input id="owner_phone" type="tel" name="owner_phone" value="{{ pet.owner_phone or '' }}">
+    <label for="owner_address">Zona / dirección habitual</label>
+    <input id="owner_address" type="text" name="owner_address" value="{{ pet.owner_address or '' }}">
+
+    <h3 style="margin-top:22px;">Resumen médico</h3>
+    <label for="conditions">Condiciones / enfermedades</label>
+    <textarea id="conditions" name="conditions">{{ pet.conditions or '' }}</textarea>
+    <label for="allergies">Alergias</label>
+    <textarea id="allergies" name="allergies">{{ pet.allergies or '' }}</textarea>
+    <label for="medications">Medicamentos actuales</label>
+    <textarea id="medications" name="medications">{{ pet.medications or '' }}</textarea>
+
+    <h3 style="margin-top:22px;">Rescate</h3>
+    <label for="temperament_notes">Temperamento — cómo acercarse</label>
+    <textarea id="temperament_notes" name="temperament_notes">{{ pet.temperament_notes or '' }}</textarea>
+    <label for="reward_offered">Recompensa (opcional)</label>
+    <input id="reward_offered" type="text" name="reward_offered" value="{{ pet.reward_offered or '' }}">
+
+    <button class="btn btn-action" type="submit" style="margin-top:22px;">Guardar cambios</button>
+  </form>
+
+  <div style="margin-top:16px; text-align:center;">
+    <a class="link-plain" href="{{ url_for('admin.dashboard') }}">&larr; Volver al panel</a>
+  </div>
+</div>
+{% endblock %}

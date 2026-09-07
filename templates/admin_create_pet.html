@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Crear mascota · Admin{% endblock %}
+{% block content %}
+<div class="glass-card">
+  <p class="eyebrow">Nueva mascota</p>
+  <h1>Crear perfil de mascota</h1>
+
+  <form method="POST" enctype="multipart/form-data" style="margin-top:14px;">
+    <label for="pet_name">Nombre *</label>
+    <input id="pet_name" type="text" name="pet_name" value="{{ form.pet_name or '' }}" required autofocus>
+
+    <label for="slug">Slug / URL personalizada (opcional)</label>
+    <input id="slug" type="text" name="slug" value="{{ form.slug or '' }}" placeholder="ej. firulais">
+    <p class="field-hint">Si lo dejas vacío, se genera automáticamente. Comparte namespace con los perfiles de persona (no se pueden repetir).</p>
+
+    <div class="form-grid-2">
+      <div>
+        <label for="species">Especie</label>
+        <div class="select-wrap">
+        <select id="species" name="species">
+          {% for opt in ['', 'Perro', 'Gato', 'Otro'] %}
+            <option value="{{ opt }}">{{ opt if opt else 'Selecciona' }}</option>
+          {% endfor %}
+        </select>
+        </div>
+      </div>
+      <div>
+        <label for="breed">Raza</label>
+        <input id="breed" type="text" name="breed">
+      </div>
+    </div>
+
+    <label for="color_markings">Color / señas particulares</label>
+    <textarea id="color_markings" name="color_markings" placeholder="Ej. Café con una mancha blanca en el pecho"></textarea>
+
+    <div class="form-grid-2">
+      <div>
+        <label for="sex">Sexo</label>
+        <div class="select-wrap"> 
+        <select id="sex" name="sex">
+          {% for opt in ['', 'Macho', 'Hembra'] %}
+            <option value="{{ opt }}">{{ opt if opt else 'Selecciona' }}</option>
+          {% endfor %}
+        </select>
+        </div>
+      </div>
+      <div>
+        <label for="age_approx">Edad aproximada</label>
+        <input id="age_approx" type="text" name="age_approx" placeholder="Ej. 3 años">
+      </div>
+    </div>
+
+    <label for="sterilized">Esterilizado/a</label>
+    <div class="select-wrap">
+    <select id="sterilized" name="sterilized">
+      <option value="">No sé / no aplica</option>
+      <option value="si">Sí</option>
+      <option value="no">No</option>
+    </select>
+    </div>
+
+    <label for="microchip">Número de microchip (si tiene)</label>
+    <input id="microchip" type="text" name="microchip">
+
+    <h3 style="margin-top:22px;">Foto (opcional)</h3>
+        <div class="file-field" style="margin-top:10px;">
+      <label class="file-btn" for="photo">Seleccionar archivo</label>
+      <input type="file" id="photo" name="photo" accept="image/*"
+             onchange="document.getElementById('photo-name').textContent = this.files[0]?.name || 'Ningún archivo seleccionado'">
+      <span class="file-name" id="photo-name">Ningún archivo seleccionado</span>
+    </div>
+    <p class="field-hint">JPG o PNG, máx. 5 MB.</p>
+
+    <h3 style="margin-top:22px;">Dueño/a</h3>
+    <label for="owner_name">Nombre</label>
+    <input id="owner_name" type="text" name="owner_name">
+    <label for="owner_phone">Teléfono (WhatsApp)</label>
+    <input id="owner_phone" type="tel" name="owner_phone">
+    <label for="owner_address">Zona / dirección habitual</label>
+    <input id="owner_address" type="text" name="owner_address">
+
+    <h3 style="margin-top:22px;">Resumen médico</h3>
+    <label for="conditions">Condiciones / enfermedades</label>
+    <textarea id="conditions" name="conditions"></textarea>
+    <label for="allergies">Alergias</label>
+    <textarea id="allergies" name="allergies"></textarea>
+    <label for="medications">Medicamentos actuales</label>
+    <textarea id="medications" name="medications"></textarea>
+
+    <h3 style="margin-top:22px;">Rescate</h3>
+    <label for="temperament_notes">Temperamento — cómo acercarse</label>
+    <textarea id="temperament_notes" name="temperament_notes" placeholder="Ej. Es asustadizo, no perseguir, ofrecer comida en el piso"></textarea>
+    <label for="reward_offered">Recompensa (opcional)</label>
+    <input id="reward_offered" type="text" name="reward_offered" placeholder="Ej. Sí, $100.000">
+
+    <button class="btn btn-action" type="submit" style="margin-top:22px;">Crear mascota y generar PIN</button>
+  </form>
+
+  <div style="margin-top:16px; text-align:center;">
+    <a class="link-plain" href="{{ url_for('admin.dashboard') }}">&larr; Volver al panel</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Editar {{ user.full_name }} · Admin{% endblock %}
+{% block content %}
+<div class="glass-card">
+  <p class="eyebrow">Editando (como admin)</p>
+  <h1>{{ user.full_name }}</h1>
+  <p class="faint" style="margin-top:6px;">Slug: /{{ user.slug }}</p>
+
+  <form method="POST" enctype="multipart/form-data" style="margin-top:14px;">
+    <label for="full_name">Nombre completo *</label>
+    <input id="full_name" type="text" name="full_name" value="{{ user.full_name }}" required>
+
+    <label for="document_id">Documento de identidad</label>
+    <input id="document_id" type="text" name="document_id" value="{{ user.document_id or '' }}">
+
+    <label for="address">Dirección de residencia</label>
+    <input id="address" type="text" name="address" value="{{ user.address or '' }}">
+
+    <label for="phone">Teléfono de contacto propio</label>
+    <input id="phone" type="tel" name="phone" value="{{ user.phone or '' }}">
+
+    <h3 style="margin-top:22px;">Foto</h3>
+    {% if user.photo_url %}
+      <div style="margin-top:10px; display:flex; align-items:center; gap:14px;">
+        <img class="profile-photo" src="{{ user.photo_url }}" alt="Foto actual">
+        <label style="margin:0; display:flex; align-items:center; gap:6px; font-weight:500;">
+          <input type="checkbox" name="remove_photo" value="1" style="width:auto;"> Quitar foto
+        </label>
+      </div>
+    {% endif %}
+        <div class="file-field" style="margin-top:10px;">
+      <label class="file-btn" for="photo">Seleccionar archivo</label>
+      <input type="file" id="photo" name="photo" accept="image/*"
+             onchange="document.getElementById('photo-name').textContent = this.files[0]?.name || 'Ningún archivo seleccionado'">
+      <span class="file-name" id="photo-name">Ningún archivo seleccionado</span>
+    </div>
+    <p class="field-hint">JPG o PNG, máx. 5 MB.</p>
+
+    <h3 style="margin-top:22px;">Contactos de emergencia (hasta 3)</h3>
+    {% for i in (1, 2, 3) %}
+      <div class="glass-section">
+        <p class="eyebrow">Contacto {{ i }}</p>
+        <label>Nombre</label>
+        <input type="text" name="emergency_contact_{{ i }}_name" value="{{ user['emergency_contact_' ~ i ~ '_name'] or '' }}">
+        <div class="form-grid-2">
+          <div>
+            <label>Teléfono (WhatsApp)</label>
+            <input type="tel" name="emergency_contact_{{ i }}_phone" value="{{ user['emergency_contact_' ~ i ~ '_phone'] or '' }}">
+          </div>
+          <div>
+            <label>Parentesco</label>
+            <div class="select-wrap">
+              <select name="emergency_contact_{{ i }}_relationship">
+                {% set current = user['emergency_contact_' ~ i ~ '_relationship'] or '' %}
+                {% for opt in ['', 'Padre', 'Madre', 'Acudiente', 'Hijo/a', 'Cónyuge', 'Hermano/a', 'Otro'] %}
+                  <option value="{{ opt }}" {% if opt == current %}selected{% endif %}>{{ opt if opt else 'Selecciona' }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+
+    <h3 style="margin-top:22px;">Resumen médico de emergencia</h3>
+    <label for="blood_type">Tipo de sangre</label>
+    <input id="blood_type" type="text" name="blood_type" value="{{ user.blood_type or '' }}">
+    <label for="conditions">Condiciones / enfermedades relevantes</label>
+    <textarea id="conditions" name="conditions">{{ user.conditions or '' }}</textarea>
+    <label for="allergies">Alergias</label>
+    <textarea id="allergies" name="allergies">{{ user.allergies or '' }}</textarea>
+    <label for="medications">Medicamentos actuales</label>
+    <textarea id="medications" name="medications">{{ user.medications or '' }}</textarea>
+    <label for="medical_device">Dispositivo o kit que porta y cómo usarlo</label>
+    <textarea id="medical_device" name="medical_device">{{ user.medical_device or '' }}</textarea>
+    <label for="care_instructions">Qué hacer si presenta una crisis</label>
+    <textarea id="care_instructions" name="care_instructions">{{ user.care_instructions or '' }}</textarea>
+    <label for="insurance">EPS / Seguro médico</label>
+    <input id="insurance" type="text" name="insurance" value="{{ user.insurance or '' }}">
+
+    <button class="btn btn-action" type="submit" style="margin-top:22px;">Guardar cambios</button>
+  </form>
+
+  <div style="margin-top:16px; text-align:center;">
+    <a class="link-plain" href="{{ url_for('admin.dashboard') }}">&larr; Volver al panel</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}{{ pet.pet_name }} · {{ site_name }}{% endblock %}
+{% block content %}
+
+<div class="glass-card">
+  <div class="id-header">
+    {% if pet.photo_url %}
+      <img class="profile-photo" src="{{ pet.photo_url }}" alt="Foto de {{ pet.pet_name }}">
+    {% else %}
+      <div class="profile-photo-placeholder">🐾</div>
+    {% endif %}
+    <div class="id-meta">
+      <p class="eyebrow">Mascota perdida / con dueño</p>
+      <h1>{{ pet.pet_name }}</h1>
+      <p class="muted">{{ pet.species or 'Mascota' }}{% if pet.breed %} · {{ pet.breed }}{% endif %}</p>
+    </div>
+  </div>
+
+  <div class="badge-row" style="margin-top:14px;">
+    {% if pet.sex %}<span class="badge">{{ pet.sex }}</span>{% endif %}
+    {% if pet.age_approx %}<span class="badge">{{ pet.age_approx }}</span>{% endif %}
+    {% if pet.sterilized == 1 %}<span class="badge">Esterilizado/a</span>{% endif %}
+    {% if pet.sterilized == 0 %}<span class="badge">No esterilizado/a</span>{% endif %}
+    {% if pet.microchip %}<span class="badge">Chip: {{ pet.microchip }}</span>{% endif %}
+  </div>
+
+  {% if pet.color_markings %}
+  <div class="glass-section">
+    <h3>Color / señas particulares</h3>
+    <p style="margin-top:8px;">{{ pet.color_markings }}</p>
+  </div>
+  {% endif %}
+
+  {% if pet.temperament_notes %}
+  <div class="glass-section">
+    <h3>Temperamento — cómo acercarse</h3>
+    <p style="margin-top:8px;">{{ pet.temperament_notes }}</p>
+  </div>
+  {% endif %}
+
+  {% if medical_fields %}
+  <div class="glass-section">
+    <h3>Información médica</h3>
+    {% for label, value in medical_fields %}
+      <div class="medical-row">
+        <span class="label">{{ label }}</span>
+        <span class="value">{{ value }}</span>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if pet.owner_address %}
+  <div class="glass-section">
+    <h3>Zona habitual</h3>
+    <p style="margin-top:8px;">{{ pet.owner_address }}</p>
+  </div>
+  {% endif %}
+
+  {% if pet.reward_offered %}
+  <div class="glass-section">
+    <h3>Recompensa</h3>
+    <p style="margin-top:8px;">{{ pet.reward_offered }}</p>
+  </div>
+  {% endif %}
+
+  {% if owner_contact %}
+  <a class="btn btn-emergency" style="margin-top:18px;" href="{{ owner_contact.wa_link }}"
+     data-phone="{{ owner_contact.phone_digits }}" data-message="{{ owner_contact.message }}"
+     onclick="return shareLocationAndOpenWhatsapp(event, this)"
+     target="_blank" rel="noopener">
+    Avisar por WhatsApp a {{ owner_contact.name.split(' ')[0] }}
+  </a>
+  <div class="glass-section">
+    <h3>Contacto del dueño/a</h3>
+    <div class="contact-row">
+      <div class="contact-info">
+        <div class="name">{{ owner_contact.name }}</div>
+        {% if owner_contact.phone %}<div class="phone">{{ owner_contact.phone }}</div>{% endif %}
+      </div>
+      {% if owner_contact.wa_link %}
+      <a class="wa-btn" href="{{ owner_contact.wa_link }}"
+         data-phone="{{ owner_contact.phone_digits }}" data-message="{{ owner_contact.message }}"
+         onclick="return shareLocationAndOpenWhatsapp(event, this)"
+         target="_blank" rel="noopener" aria-label="Escribir por WhatsApp al dueño/a">
+        <svg viewBox="0 0 32 32" fill="white"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.4.7 4.6 1.9 6.5L4 29l7.7-1.9c1.8 1 3.9 1.5 6.3 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-2 0-3.9-.5-5.6-1.5l-.4-.2-4.6 1.1 1.2-4.5-.3-.4C5.2 17.6 4.6 16.3 4.6 15c0-6.3 5.1-11.4 11.4-11.4S27.4 8.7 27.4 15 22.3 24.8 16 24.8zm6.3-8.5c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.8.2s-.9 1.1-1.1 1.3-.4.3-.7.1c-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.3.5-.5.2-.2.2-.3.3-.5.1-.2.1-.4 0-.6-.1-.2-.8-1.9-1.1-2.6-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.3 2.4 3.7 5.9 5.1.8.3 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2-.8 2.3-1.6.3-.8.3-1.4.2-1.6-.1-.1-.3-.2-.6-.4z"/></svg>
+      </a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+
+  <div class="btn-row" style="margin-top:20px;">
+    <a class="btn btn-ghost" href="{{ url_for('public.edit_profile', slug=pet.slug) }}">Editar perfil</a>
+  </div>
+</div>
+
+<footer class="page-footer">
+  <span class="faint">{{ site_name }}</span>
+</footer>
+{% endblock %}
