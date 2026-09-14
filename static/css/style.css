@@ -1,14 +1,15 @@
 :root {
   --bg-deep: #050b18;
   --bg-mid: #0b2545;
-  --glow-teal: #14b8a6;
-  --glow-indigo: #4c6fff;
+  --glow-teal: #4c6fff;
+  --glow-indigo:  #14b8a6;
 
   --accent-emergency: #30d158;
+  --accent-delete:#ff453a;
   --accent-action: #0a84ff;
   --accent-success: #30d158;
 
-  --glass-bg: rgba(255, 255, 255, 0.09);
+  --glass-bg: rgba(255, 255, 255, 0.133);
   --glass-bg-strong: rgba(255, 255, 255, 0.14);
   --glass-border: rgba(255, 255, 255, 0.16);
   --glass-blur: 22px;
@@ -76,15 +77,16 @@ body::before {
 .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-secondary); margin: 0 0 6px; }
 
 .nfc-badge {
-  width: 56px; height: 56px; border-radius: 50%;
+  /* width: 56px; height: 56px; */border-radius: 10%;
+  width: 220px; margin: 0 auto 28px;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 14px; position: relative;
-  background: linear-gradient(135deg, var(--glow-teal), var(--glow-indigo));
+  /*background: linear-gradient(135deg, var(--glow-teal), var(--glow-indigo));*/
 }
 .nfc-badge svg { width: 26px; height: 26px; position: relative; z-index: 2; }
 .nfc-badge::before, .nfc-badge::after {
   content: ""; position: absolute; inset: 0; border-radius: 50%;
-  border: 2px solid rgba(20, 184, 166, 0.55);
+  border: 1px solid rgba(197, 226, 235, 0.457);
   animation: nfc-pulse 2.4s ease-out infinite;
 }
 .nfc-badge::after { animation-delay: 1.2s; }
@@ -132,7 +134,7 @@ p { margin: 0; line-height: 1.5; }
 .btn-action { background: var(--accent-action); border-color: var(--accent-action); color: #fff; }
 .btn-ghost { background: transparent; }
 .btn-sm { padding: 10px 16px; font-size: 13px; width: auto; }
-.btn-danger-outline { color: var(--accent-emergency); border-color: rgba(255,69,58,0.4); background: transparent; }
+.btn-danger-outline { color: var(--accent-delete); border-color: rgba(255,69,58,0.4); background: transparent; }
 .btn-row { display: flex; gap: 10px; }
 .btn-row .btn { flex: 1; }
 
